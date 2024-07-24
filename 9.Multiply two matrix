@@ -1,0 +1,40 @@
+#include <stdio.h>
+
+#define ROWS1 2
+#define COLS1 3
+#define ROWS2 3
+#define COLS2 2
+
+void multiplyMatrices(int firstMatrix[ROWS1][COLS1], int secondMatrix[ROWS2][COLS2], int result[ROWS1][COLS2]) {
+    for (int i = 0; i < ROWS1; i++) {
+        for (int j = 0; j < COLS2; j++) {
+            result[i][j] = 0;
+            for (int k = 0; k < COLS1; k++) {
+                result[i][j] += firstMatrix[i][k] * secondMatrix[k][j];
+            }
+        }
+    }
+}
+
+void printMatrix(int matrix[ROWS1][COLS2]) {
+    for (int i = 0; i < ROWS1; i++) {
+        for (int j = 0; j < COLS2; j++) {
+            printf("%d ", matrix[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+int main() {
+	printf("R.Gnana Prakash Reddy-192211740\n");
+    int firstMatrix[ROWS1][COLS1] = {{1, 2, 3}, {4, 5, 6}};
+    int secondMatrix[ROWS2][COLS2] = {{7, 8}, {9, 10}, {11, 12}};
+    int result[ROWS1][COLS2];
+
+    multiplyMatrices(firstMatrix, secondMatrix, result);
+
+    printf("Resultant Matrix:\n");
+    printMatrix(result);
+
+    return 0;
+}
