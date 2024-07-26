@@ -1,0 +1,28 @@
+
+#include <stdio.h>
+
+// Function to reverse the given number
+int reverseNumber(int num) {
+    int reversed = 0;
+    
+    while (num != 0) {
+        int digit = num % 10;  // Get the last digit
+        reversed = reversed * 10 + digit;  // Append the digit to the reversed number
+        num /= 10;  // Remove the last digit from the original number
+    }
+    
+    return reversed;
+}
+
+int main() {
+    int num;
+    printf("R.Gnana Prakash reddy - 192211740\n");
+    
+    printf("Enter a number: ");
+    scanf("%d", &num);
+    
+    int reversed = reverseNumber(num);
+    printf("Reversed number: %d\n", reversed);
+    
+    return 0;
+}
