@@ -1,0 +1,64 @@
+#include <stdio.h>
+#include <limits.h>
+
+// A structure to return both max and min from a single function
+struct Pair {
+    int max;
+    int min;
+};
+
+// A utility function to find the maximum of two numbers
+int max(int a, int b) {
+    return (a > b) ? a : b;
+}
+
+// A utility function to find the minimum of two numbers
+int min(int a, int b) {
+    return (a < b) ? a : b;
+}
+
+// A function to find the maximum and minimum values in an array using divide and conquer
+struct Pair findMinMax(int arr[], int low, int high) {
+    struct Pair minmax, leftMinMax, rightMinMax;
+    int mid;
+
+    // If there is only one element
+    if (low == high) {
+        minmax.max = arr[low];
+        minmax.min = arr[low];
+        return minmax;
+    }
+
+    // If there are two elements
+    if (high == low + 1) {
+        if (arr[low] > arr[high]) {
+            minmax.max = arr[low];
+            minmax.min = arr[high];
+        } else {
+            minmax.max = arr[high];
+            minmax.min = arr[low];
+        }
+        return minmax;
+    }
+
+    // If there are more than two elements
+    mid = (low + high) / 2;
+    leftMinMax = findMinMax(arr, low, mid);
+    rightMinMax = findMinMax(arr, mid + 1, high);
+
+    // Compare the results of the two halves
+    minmax.max = max(leftMinMax.max, rightMinMax.max);
+    minmax.min = min(leftMinMax.min, rightMinMax.min);
+
+    return minmax;
+}
+
+int main() {
+    int arr[] = {1000, 11, 445, 1, 330, 3000};
+    int arr_size = sizeof(arr)/sizeof(arr[0]);
+    struct Pair minmax = findMinMax(arr, 0, arr_size - 1);
+    printf("R.Gnana Prakash reddy-192211740\n");
+    printf("Minimum element is %d\n", minmax.min);
+    printf("Maximum element is %d\n", minmax.max);
+    return 0;
+}
