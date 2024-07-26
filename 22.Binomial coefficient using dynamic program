@@ -1,0 +1,36 @@
+#include <stdio.h>
+
+// Function to calculate the binomial coefficient C(n, k) using dynamic programming
+int binomialCoefficient(int n, int k) {
+    int C[n + 1][k + 1];
+    int i, j;
+
+    // Initialize all entries of the table to 0
+    for (i = 0; i <= n; i++) {
+        for (j = 0; j <= k; j++) {
+            C[i][j] = 0;
+        }
+    }
+
+    // Calculate the binomial coefficient in a bottom-up manner
+    for (i = 0; i <= n; i++) {
+        for (j = 0; j <= i && j <= k; j++) {
+            // Base cases
+            if (j == 0 || j == i) {
+                C[i][j] = 1;
+            } else {
+                // Use previously computed values
+                C[i][j] = C[i - 1][j - 1] + C[i - 1][j];
+            }
+        }
+    }
+
+    return C[n][k];
+}
+
+int main() {
+    int n = 5, k = 2;
+    printf("R.Gnana Prakash Reddy - 192211740\n");
+    printf("C(%d, %d) = %d\n", n, k, binomialCoefficient(n, k));
+    return 0;
+}
