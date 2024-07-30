@@ -1,0 +1,46 @@
+#include <stdio.h>
+
+void subsetSum(int set[], int subset[], int subsetSize, int total, int nodeIndex, int target) {
+    // If the total is equal to target, print the subset
+    if (total == target) {
+        printf("{ ");
+        for (int i = 0; i < subsetSize; i++) {
+            printf("%d ", subset[i]);
+        }
+        printf("}\n");
+        return;
+    }
+
+    // If the total exceeds the target or we have processed all elements
+    if (total > target || nodeIndex >= subsetSize) {
+        return;
+    }
+
+    // Include the current element and recurse
+    subset[nodeIndex] = set[nodeIndex];
+    subsetSum(set, subset, subsetSize, total + set[nodeIndex], nodeIndex + 1, target);
+
+    // Exclude the current element and recurse
+    subset[nodeIndex] = 0;
+    subsetSum(set, subset, subsetSize, total, nodeIndex + 1, target);
+}
+
+void findSubsets(int set[], int size, int target) {
+    int subset[size];
+    for (int i = 0; i < size; i++) {
+        subset[i] = 0;
+    }
+    subsetSum(set, subset, size, 0, 0, target);
+}
+
+int main() {
+    int set[] = {10, 7, 5, 18, 12, 20, 15};
+    int size = sizeof(set) / sizeof(set[0]);
+    int target = 35;
+    printf("R.Gnana Prakash Reddy - 192211740\n");
+
+    printf("Subsets of the given set that sum to %d are:\n", target);
+    findSubsets(set, size, target);
+
+    return 0;
+}
