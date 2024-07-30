@@ -1,0 +1,116 @@
+#include <stdio.h>
+#include <limits.h>
+
+#define N 4
+
+// Function to find the minimum cost using Branch and Bound
+int calculateCost(int costMatrix[N][N], int assignment[N]) {
+    int totalCost = 0;
+    for (int i = 0; i < N; i++) {
+        totalCost += costMatrix[i][assignment[i]];
+    }
+    return totalCost;
+}
+
+void copyArray(int src[], int dest[]) {
+    for (int i = 0; i < N; i++) {
+        dest[i] = src[i];
+    }
+}
+
+void solveAssignmentProblem(int costMatrix[N][N]) {
+    int assignment[N]; // Current assignment
+    int bestAssignment[N]; // Best assignment found so far
+    int minCost = INT_MAX; // Minimum cost found so far
+
+    int i, j;
+    for (i = 0; i < N; i++) {
+        assignment[i] = -1; // Initialize assignment array
+    }
+
+    int assignedTasks[N] = {0}; // Track assigned tasks
+    int assignedWorkers = 0; // Number of assigned workers
+    int currentWorker = 0; // Start with the first worker
+
+    // Use a stack to implement the depth-first search (DFS)
+    int stack[N][N + 2]; // Stack for DFS
+    int top = -1; // Stack top index
+
+    // Push initial state to the stack
+    top++;
+    for (i = 0; i < N; i++) {
+        stack[top][i] = -1;
+    }
+    stack[top][N] = 0; // Assigned workers count
+    stack[top][N + 1] = 0; // Current cost
+
+    while (top >= 0) {
+        // Pop the top state from the stack
+        int currentState[N + 2];
+        for (i = 0; i < N + 2; i++) {
+            currentState[i] = stack[top][i];
+        }
+        top--;
+
+        // Extract current assignment, assigned workers count, and current cost
+        for (i = 0; i < N; i++) {
+            assignment[i] = currentState[i];
+        }
+        assignedWorkers = currentState[N];
+        int currentCost = currentState[N + 1];
+
+        if (assignedWorkers == N) {
+            // All workers are assigned, update minimum cost and best assignment if needed
+            if (currentCost < minCost) {
+                minCost = currentCost;
+                copyArray(assignment, bestAssignment);
+            }
+            continue;
+        }
+
+        // Try assigning each task to the current worker
+        currentWorker = assignedWorkers;
+        for (j = 0; j < N; j++) {
+            if (!assignedTasks[j] && (assignment[currentWorker] == -1 || assignment[currentWorker] != j)) {
+                assignment[currentWorker] = j;
+                assignedTasks[j] = 1;
+                int newCost = currentCost + costMatrix[currentWorker][j];
+
+                if (newCost < minCost) {
+                    // Push new state to the stack
+                    top++;
+                    for (i = 0; i < N; i++) {
+                        stack[top][i] = assignment[i];
+                    }
+                    stack[top][N] = assignedWorkers + 1;
+                    stack[top][N + 1] = newCost;
+                }
+
+                // Backtrack
+                assignment[currentWorker] = -1;
+                assignedTasks[j] = 0;
+            }
+        }
+    }
+
+    // Print the best assignment and minimum cost
+    printf("R.Gnana Prakash Reddy - 192211740\n");
+    printf("Minimum cost: %d\n", minCost);
+    printf("Best assignment:\n");
+    for (i = 0; i < N; i++) {
+        printf("Worker %d -> Task %d\n", i, bestAssignment[i]);
+    }
+}
+
+int main() {
+    int costMatrix[N][N] = {
+        {9, 2, 7, 8},
+        {6, 4, 3, 7},
+        {5, 8, 1, 8},
+        {7, 6, 9, 4}
+    };
+
+    solveAssignmentProblem(costMatrix);
+
+    return 0;
+}
